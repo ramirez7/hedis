@@ -16,6 +16,7 @@ import Control.Applicative
 #endif
 import Control.Monad.Reader
 import qualified Data.ByteString as B
+import qualified Data.ByteString.Char8 as BC
 import Data.IORef
 import Data.Pool
 import Data.Time
@@ -123,6 +124,7 @@ sendRequest :: (RedisCtx m f, RedisResult a)
 sendRequest req = do
     r' <- liftRedis $ Redis $ do
         conn <- asks envConn
+        liftIO $ BC.putStrLn $ "hedis.sendRequest: " `mappend` B.intercalate " " req
         r <- liftIO $ PP.request conn (renderRequest req)
         setLastReply r
         return r
