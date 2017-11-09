@@ -124,7 +124,7 @@ sendRequest :: (RedisCtx m f, RedisResult a)
 sendRequest req = do
     r' <- liftRedis $ Redis $ do
         conn <- asks envConn
-        liftIO $ BC.putStrLn $ "hedis.sendRequest: " `mappend` B.intercalate " " req
+        liftIO $ BC.putStrLn $ "hedis.sendRequest " `mappend` "(" `mappend` BC.pack (show $ length req) `mappend` "): "`mappend` B.intercalate " " req
         r <- liftIO $ PP.request conn (renderRequest req)
         setLastReply r
         return r
